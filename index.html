@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneaky Sasquatch Save Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bree Serif', sans-serif; /* Use Bree Serif font with fallback to sans-serif */
+        }
+
+        /* Additional CSS styles */
+        /* Example: */
+        .container {
+            font-family: 'Bree Serif', sans-serif; /* Apply Bree Serif font to container */
+            /* Other styles for container */
+        }
+
+        /* CSS for file upload container */
+        .file-upload-container {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        /* CSS for file input and button */
+        #fileInput {
+            display: none; /* Hide file input */
+        }
+
+        #uploadButton {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #uploadButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="file-upload-container">
+            <h2>Upload your file</h2>
+            <input type="file" id="fileInput" accept=".txt">
+            <label for="fileInput" id="uploadButton">Upload</label>
+        </div>
+    </div>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                let fileContent = event.target.result;
+
+                // Prompt user for desired edits
+                let desiredCoins = prompt("Enter the desired amount of coins:", getFieldValue("coins", fileContent));
+                let desiredBankCoins = prompt("Enter the desired amount of bank coins:", getFieldValue("bankcoin", fileContent));
+                let desiredLumber = prompt("Enter the desired amount of lumber:", getFieldValue("lumber", fileContent));
+                let desiredRentApart = prompt("What apartment do you want to rent? (1, 2, or 3):", getFieldValue("rent_apart", fileContent));
+                let addLicenseS = confirm("Do you want to add license_s? Click OK to add or Cancel to skip.");
+
+                // Validate rent_apart input
+                while (!["1", "2", "3"].includes(desiredRentApart)) {
+                    desiredRentApart = prompt("Invalid input. Please enter 1, 2, or 3 for the apartment to rent:", desiredRentApart);
+                }
+
+                // Update file content with the desired edits
+                fileContent = setFieldValue("coins", desiredCoins, fileContent);
+                fileContent = setFieldValue("bankcoin", desiredBankCoins, fileContent);
+                fileContent = setFieldValue("lumber", desiredLumber, fileContent);
+                fileContent = setFieldValue("rent_apart", desiredRentApart, fileContent);
+
+                // Add license_s if requested
+                if (addLicenseS) {
+                    fileContent = addLicenseSToInventory(fileContent);
+                }
+
+                // Create a blob with the updated content
+                const blob = new Blob([fileContent], { type: 'text/plain' });
+
+                // Create a download link and trigger download
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = file.name; // Keep the original filename
+                link.click();
+
+                // Alert user about redirection
+                alert("You are about to be redirected to the guide for open in-game.");
+
+                // Alert user about renaming export_save.txt
+                if (file.name === 'export_save.txt') {
+                    alert("If you uploaded an export_save.txt, you can rename it to the newest backup on your computer.");
+                }
+
+                // Redirect user to the guide page
+                window.location.href = 'https://sneaky-sasquatch.fandom.com/wiki/Save_editing?so=search#Restoring_the_edited_backup';
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // Function to get the value of a field from the file content
+        function getFieldValue(fieldName, content) {
+            const match = new RegExp(`"${fieldName}":\\s*"([^"]+)"`).exec(content);
+            return match ? match[1] : '';
+        }
+
+        // Function to set the value of a field in the file content
+        function setFieldValue(fieldName, value, content) {
+            return content.replace(new RegExp(`("${fieldName}":\\s*)"[^"]+"`), `$1"${value}"`);
+        }
+
+        // Function to add license_s to the inventory
+        function addLicenseSToInventory(content) {
+            const inventoryStartIndex = content.indexOf("--------default/inventory.stuff");
+            if (inventoryStartIndex !== -1) {
+                const inventoryEndIndex = content.indexOf("--------", inventoryStartIndex + 1);
+                if (inventoryEndIndex !== -1) {
+                    const inventoryPart = content.substring(inventoryStartIndex, inventoryEndIndex);
+                    const newItem = '{"type":"license_s"},';
+                    const newItemIndex = inventoryPart.indexOf("item 3") + "item 3".length;
+                    return content.slice(0, inventoryStartIndex + newItemIndex) + newItem + content.slice(inventoryStartIndex + newItemIndex);
+                }
+            }
+            return content;
+        }
+
+        // Event listener for file input change
+        document.getElementById('fileInput').addEventListener('change', uploadFile);
+    </script>
+</body>
+</html>
