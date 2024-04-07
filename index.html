@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneaky Sasquatch Save Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bree Serif', sans-serif; /* Use Bree Serif font with fallback to sans-serif */
+        }
+
+        /* CSS for file upload container */
+        .file-upload-container {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        /* CSS for form elements */
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="file-upload-container">
+        <h2>Sneaky Sasquatch Save Editor</h2>
+      <p>go to https://ikyih.github.io/SneakySasquatchSaveEditor/old.html for the old version</p>
+        <form id="saveEditorForm">
+            <label for="fileInput" class="form-label">Upload your file</label>
+            <input type="file" id="fileInput" name="fileInput" class="form-input">
+            <span id="fileInputError" class="error-message"></span>
+
+            <div id="formFields" class="hidden">
+                <label for="coins" class="form-label">Desired amount of coins:</label>
+                <input type="text" id="coins" name="coins" class="form-input">
+                <span id="coinsError" class="error-message"></span>
+                
+                <label for="bankCoins" class="form-label">Desired amount of bank coins:</label>
+                <input type="text" id="bankCoins" name="bankCoins" class="form-input">
+                <span id="bankCoinsError" class="error-message"></span>
+                
+                <label for="lumber" class="form-label">Desired amount of lumber:</label>
+                <input type="text" id="lumber" name="lumber" class="form-input">
+                <span id="lumberError" class="error-message"></span>
+                
+                <label for="rentApart" class="form-label">What apartment do you want to rent? (1, 2, or 3):</label>
+                <input type="text" id="rentApart" name="rentApart" class="form-input">
+                <span id="rentApartError" class="error-message"></span>
+                
+                <label class="form-label">Do you want to add license_s?</label>
+                <input type="checkbox" id="addLicenseS" name="addLicenseS" class="form-input">
+                
+                <div id="licensePrompts">
+                    <label for="licenseAPrompt" class="form-label">Do you want to add license_a?</label>
+                    <input type="checkbox" id="licenseAPrompt" name="licenseAPrompt" class="form-input">
+                    <span id="licenseAError" class="error-message"></span>
+
+                    <label for="licenseBPrompt" class="form-label">Do you want to add license_b?</label>
+                    <input type="checkbox" id="licenseBPrompt" name="licenseBPrompt" class="form-input">
+                    <span id="licenseBError" class="error-message"></span>
+
+                    <label for="licenseCPrompt" class="form-label">Do you want to add license_c?</label>
+                    <input type="checkbox" id="licenseCPrompt" name="licenseCPrompt" class="form-input">
+                    <span id="licenseCError" class="error-message"></span>
+
+                    <label for="licenseDPrompt" class="form-label">Do you want to add license_d?</label>
+                    <input type="checkbox" id="licenseDPrompt" name="licenseDPrompt" class="form-input">
+                    <span id="licenseDError" class="error-message"></span>
+                </div>
+                
+                <button type="button" onclick="generateSaveFile()" class="form-button" id="generateButton">Generate Save File</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function() {
+            document.getElementById('formFields').classList.remove('hidden');
+        });
+
+        function generateSaveFile() {
+            // Generate save file based on user input
+        }
+    </script>
+</body>
+</html>
