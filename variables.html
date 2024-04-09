@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneaky Sasquatch Variables.stuff Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bree Serif', sans-serif; /* Use Bree Serif font with fallback to sans-serif */
+        }
+
+        /* CSS for form elements */
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="file-upload-container">
+        <h2>Sneaky Sasquatch Variables.stuff Editor</h2>
+        <form id="variablesEditorForm">
+            <div id="variableFields"></div>
+            <button type="button" onclick="generateSaveFile()" class="form-button">Generate Save File</button>
+        </form>
+    </div>
+
+    <script>
+        // Sample variables.stuff data
+        let variablesStuff = {
+            "racintro": 1,
+            "raceat": 1,
+            "racsneak": 1,
+            "firstday": 1,
+            "look_mapboard": 1,
+            "bear_food_completed": 1,
+            "fatcat_intro_completed": 1,
+            "fishtut": 1,
+            "messed_with_lights": 1,
+            "mischief_scarecampers_completed": 1,
+            "duck_hat_have_item": 1,
+            "duck_hat_completed": 1,
+            "mischief_smokealarm_completed": 1,
+            "golftut": 1,
+            "q_talking_fish_completed": 1,
+            "bear_fish_completed": 1,
+            "mischief_pushboats_completed": 1,
+            "shortcut_unlocked": 1,
+            "visited_ski_master": 1,
+            "visited_license_master": 1,
+            "visited_race_master": 1,
+            "visited_mechanic": 1,
+            "visited_golf_master": 1,
+            "cave_quest_started": 1,
+            "cave_quest_completed": 1,
+            "fixmill_completed": 1,
+            "race_driver_completed": 1,
+            "treasurehunt_completed": 1,
+            "skier_quest_completed": 1,
+            "treasure_digup_completed": 1,
+            "fatcat_ending_completed": 1,
+            "celebration_quest_completed": 1
+        };
+
+        // Function to generate variable fields dynamically
+        const generateVariableFields = () => {
+            const variableFieldsContainer = document.getElementById('variableFields');
+            variableFieldsContainer.innerHTML = ''; // Clear previous fields
+
+            // Loop through variables and create input fields
+            Object.entries(variablesStuff).forEach(([key, value]) => {
+                const label = key.replace(/_/g, ' ');
+
+                // Skip variables without labels
+                if (label) {
+                    // Create label element
+                    const labelElement = document.createElement('label');
+                    labelElement.textContent = label;
+                    labelElement.setAttribute('for', key);
+                    labelElement.classList.add('form-label');
+
+                    // Create input element
+                    const inputElement = document.createElement('input');
+                    inputElement.type = 'text';
+                    inputElement.id = key;
+                    inputElement.value = value;
+                    inputElement.classList.add('form-input');
+
+                    // Append label and input elements to container
+                    variableFieldsContainer.appendChild(labelElement);
+                    variableFieldsContainer.appendChild(inputElement);
+                }
+            });
+        };
+
+        // Call the function to generate variable fields on page load
+        generateVariableFields();
+
+        // Function to generate the save file
+        const generateSaveFile = () => {
+            // Iterate through input fields and update variablesStuff
+            const inputFields = document.querySelectorAll('#variableFields input');
+            inputFields.forEach(input => {
+                variablesStuff[input.id] = input.value;
+            });
+
+            // Convert variablesStuff to JSON and log/save it
+            const saveData = JSON.stringify(variablesStuff);
+            console.log(saveData); // For demonstration purposes, log the save data
+        };
+    </script>
+</body>
+</html>

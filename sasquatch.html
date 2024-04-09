@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sneaky Sasquatch Sasquatch.stuff Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Bree Serif', sans-serif; /* Use Bree Serif font with fallback to sans-serif */
+        }
+
+        /* CSS for file upload container */
+        .file-upload-container {
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        /* CSS for form elements */
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Bree Serif', sans-serif;
+        }
+
+        .form-button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="file-upload-container">
+        <h2>Sneaky Sasquatch Sasquatch.stuff Editor</h2>
+        <form id="saveEditorForm">
+            <label for="fileInput" class="form-label">Upload your file</label>
+            <input type="file" id="fileInput" name="fileInput" class="form-input">
+            <span id="fileInputError" class="error-message"></span>
+
+            <div id="formFields" class="hidden">
+                <label for="coins" class="form-label">Desired amount of coins:</label>
+                <input type="text" id="coins" name="coins" class="form-input">
+                <span id="coinsError" class="error-message"></span>
+                
+                <label for="bankCoins" class="form-label">Desired amount of bank coins:</label>
+                <input type="text" id="bankCoins" name="bankCoins" class="form-input">
+                <span id="bankCoinsError" class="error-message"></span>
+                
+                <label for="lumber" class="form-label">Desired amount of lumber:</label>
+                <input type="text" id="lumber" name="lumber" class="form-input">
+                <span id="lumberError" class="error-message"></span>
+                
+                <label for="rentApart" class="form-label">What apartment do you want to rent? (1, 2, or 3):</label>
+                <input type="text" id="rentApart" name="rentApart" class="form-input">
+                <span id="rentApartError" class="error-message"></span>
+                
+                <button type="button" onclick="generateSaveFile()" class="form-button" id="generateButton">Generate Save File</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Sample Sasquatch.stuff data
+        const sampleSaveData = {
+            "map_locations": {},
+            "shipping": {
+                "wA": 0
+            },
+            "current_map": "f4617792c91f17d4b87089879062cea8",
+            "current_map_entrance": 12,
+            "current_disguise": "XX",
+            "current_tool": "2R",
+            "hunger": 6,
+            "cbp": "white",
+            "hunger_tick": 93,
+            "time": 226,
+            "VERSION": 2,
+            "homeMap": "eba1dfee3f1e73b45bf48c7d42fc2246",
+            "dayEndType": 0,
+            "norainctr": 5,
+            "weather": 0,
+            "day": 993,
+            "rsd": 950937869,
+            "coins": 95558899,
+            "primary_vehicle": "Jo",
+            "lumber": 0,
+            "togtool": {
+                "dwatch": 1,
+                "p3": 1,
+                "T9": 1
+            },
+            "ptkt": 9,
+            "bankcoin": 41562,
+            "cf": 9,
+            "pap": 22,
+            "gsd": -135184665,
+            "cmpn": [{
+                "i": "Mk",
+                "a": "dog",
+                "b": "j2"
+            }],
+            ".m1": 1,
+            "pb": 36,
+            "tb": 0,
+            "xmcc": 2,
+            "pwv": "As",
+            "sbonza": {
+                "KQ": 25
+            },
+            "cpm": 232,
+            "st": 12,
+            "se_h": 0,
+            "hwcd": 18,
+            "rent_apart": "1",
+            "yest_hung": 4,
+            "on_bcd": -200,
+            "today_news": "yA"
+        };
+
+        document.getElementById('fileInput').addEventListener('change', function() {
+            document.getElementById('formFields').classList.remove('hidden');
+        });
+
+        function generateSaveFile() {
+            // Get form input values
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            // Validate file upload
+            if (!file) {
+                document.getElementById('fileInputError').textContent = 'Please select a file.';
+                return;
+            } else {
+                document.getElementById('fileInputError').textContent = '';
+            }
+
+            const desiredCoins = document.getElementById('coins').value.trim();
+            const desiredBankCoins = document.getElementById('bankCoins').value.trim();
+            const desiredLumber = document.getElementById('lumber').value.trim();
+            const desiredRentApart = document.getElementById('rentApart').value.trim();
+
+                      // Construct the save data based on user input
+            const saveData = {
+                "map_locations": {},
+                "shipping": {
+                    "wA": 0
+                },
+                "current_map": "f4617792c91f17d4b87089879062cea8",
+                "current_map_entrance": 12,
+                "current_disguise": "XX",
+                "current_tool": "2R",
+                "hunger": parseInt(desiredHunger),
+                "cbp": "white",
+                "hunger_tick": 93,
+                "time": 226,
+                "VERSION": 2,
+                "homeMap": "eba1dfee3f1e73b45bf48c7d42fc2246",
+                "dayEndType": 0,
+                "norainctr": 5,
+                "weather": 0,
+                "day": 993,
+                "rsd": 950937869,
+                "coins": parseInt(desiredCoins),
+                "primary_vehicle": "Jo",
+                "lumber": parseInt(desiredLumber),
+                "togtool": {
+                    "dwatch": 1,
+                    "p3": 1,
+                    "T9": 1
+                },
+                "ptkt": 9,
+                "bankcoin": parseInt(desiredBankCoins),
+                "cf": 9,
+                "pap": 22,
+                "gsd": -135184665,
+                "cmpn": [{
+                    "i": "Mk",
+                    "a": "dog",
+                    "b": "j2"
+                }],
+                ".m1": 1,
+                "pb": 36,
+                "tb": 0,
+                "xmcc": 2,
+                "pwv": "As",
+                "sbonza": {
+                    "KQ": 25
+                },
+                "cpm": 232,
+                "st": 12,
+                "se_h": 0,
+                "hwcd": 18,
+                "rent_apart": desiredRentApart,
+                "yest_hung": 4,
+                "on_bcd": -200,
+                "today_news": "yA"
+            };
+
+            // Output the generated save data (for demonstration purposes)
+            console.log(JSON.stringify(saveData));
+        }
+    </script>
+</body>
+</html>
