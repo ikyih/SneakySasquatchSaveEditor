@@ -57,91 +57,123 @@
             <div id="variableFields"></div>
             <button type="button" onclick="generateSaveFile()" class="form-button">Generate Save File</button>
         </form>
+        <input type="file" id="fileInput" style="display: none;">
+        <button onclick="uploadFile()" class="form-button">Upload File</button>
     </div>
 
     <script>
-        // Sample variables.stuff data
-        let variablesStuff = {
-            "racintro": 1,
-            "raceat": 1,
-            "racsneak": 1,
-            "firstday": 1,
-            "look_mapboard": 1,
-            "bear_food_completed": 1,
-            "fatcat_intro_completed": 1,
-            "fishtut": 1,
-            "messed_with_lights": 1,
-            "mischief_scarecampers_completed": 1,
-            "duck_hat_have_item": 1,
-            "duck_hat_completed": 1,
-            "mischief_smokealarm_completed": 1,
-            "golftut": 1,
-            "q_talking_fish_completed": 1,
-            "bear_fish_completed": 1,
-            "mischief_pushboats_completed": 1,
-            "shortcut_unlocked": 1,
-            "visited_ski_master": 1,
-            "visited_license_master": 1,
-            "visited_race_master": 1,
-            "visited_mechanic": 1,
-            "visited_golf_master": 1,
-            "cave_quest_started": 1,
-            "cave_quest_completed": 1,
-            "fixmill_completed": 1,
-            "race_driver_completed": 1,
-            "treasurehunt_completed": 1,
-            "skier_quest_completed": 1,
-            "treasure_digup_completed": 1,
-            "fatcat_ending_completed": 1,
-            "celebration_quest_completed": 1
-        };
+        let variablesStuff = {}; // Initialize variable to store uploaded data
+        const variableList = [
+            "m_sc", "m_ds", "racintro", "raceat", "racsneak", "firstday", "look_mapboard",
+            "bear_food_completed", "duck_hat_have_item", "duck_hat_completed", "mischief_smokealarm_completed",
+            "cc", "race_driver_completed", "fixmill_completed", "golfer_quest_completed", "treasurehunt_completed",
+            "celebration_quest_completed", "2o", "rq", "DA", "NC"
+        ];
 
-        // Function to generate variable fields dynamically
         const generateVariableFields = () => {
             const variableFieldsContainer = document.getElementById('variableFields');
             variableFieldsContainer.innerHTML = ''; // Clear previous fields
 
             // Loop through variables and create input fields
-            Object.entries(variablesStuff).forEach(([key, value]) => {
-                const label = key.replace(/_/g, ' ');
+            variableList.forEach(key => {
+                const label = getLabel(key);
 
-                // Skip variables without labels
-                if (label) {
-                    // Create label element
-                    const labelElement = document.createElement('label');
-                    labelElement.textContent = label;
-                    labelElement.setAttribute('for', key);
-                    labelElement.classList.add('form-label');
+                // Create label element
+                const labelElement = document.createElement('label');
+                labelElement.textContent = label;
+                labelElement.setAttribute('for', key);
+                labelElement.classList.add('form-label');
 
-                    // Create input element
-                    const inputElement = document.createElement('input');
-                    inputElement.type = 'text';
-                    inputElement.id = key;
-                    inputElement.value = value;
-                    inputElement.classList.add('form-input');
+                // Create input element
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.id = key;
+                inputElement.value = variablesStuff[key] || ''; // Set value if it exists
+                inputElement.classList.add('form-input');
 
-                    // Append label and input elements to container
-                    variableFieldsContainer.appendChild(labelElement);
-                    variableFieldsContainer.appendChild(inputElement);
-                }
+                // Append label and input elements to container
+                variableFieldsContainer.appendChild(labelElement);
+                variableFieldsContainer.appendChild(inputElement);
             });
         };
 
-        // Call the function to generate variable fields on page load
-        generateVariableFields();
+        const getLabel = (key) => {
+            switch (key) {
+                case "m_sc":
+                    return "Sasquatch Camp";
+                case "m_ds":
+                    return "Sasquatch Map";
+                case "racintro":
+                    return "Rac Intro";
+                case "raceat":
+                    return "Rac At";
+                case "racsneak":
+                    return "Rac Sneak";
+                case "firstday":
+                    return "First Day";
+                case "look_mapboard":
+                    return "Billboard 1";
+                case "bear_food_completed":
+                    return "Bear Food Completed";
+                case "duck_hat_have_item":
+                    return "Duck Hat Item";
+                case "duck_hat_completed":
+                    return "Duck Hat Completed";
+                case "mischief_smokealarm_completed":
+                    return "Mischief Smokealarm Completed";
+                case "cc":
+                    return "CC";
+                case "race_driver_completed":
+                    return "Race Driver Completed";
+                case "fixmill_completed":
+                    return "Fixmill Completed";
+                case "golfer_quest_completed":
+                    return "Golfer Quest Completed";
+                case "treasurehunt_completed":
+                    return "Treasure Hunt Completed";
+                case "celebration_quest_completed":
+                    return "Celebration Quest Completed";
+                case "2o":
+                    return "Boat Name";
+                case "rq":
+                    return "Racing Quest";
+                case "DA":
+                    return "Billboard 2";
+                case "NC":
+                    return "Ferry Name";
+                default:
+                    return "";
+            }
+        };
 
-        // Function to generate the save file
         const generateSaveFile = () => {
-            // Iterate through input fields and update variablesStuff
             const inputFields = document.querySelectorAll('#variableFields input');
             inputFields.forEach(input => {
                 variablesStuff[input.id] = input.value;
             });
 
-            // Convert variablesStuff to JSON and log/save it
-            const saveData = JSON.stringify(variablesStuff);
-            console.log(saveData); // For demonstration purposes, log the save data
+            console.log(JSON.stringify(variablesStuff)); // For demonstration purposes, log the updated variable values
         };
+
+        const uploadFile = () => {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.click(); // Trigger click on file input element
+        };
+
+        const handleFileSelect = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const content = event.target.result;
+                variablesStuff = JSON.parse(content);
+                generateVariableFields();
+            };
+
+            reader.readAsText(file);
+        };
+
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
     </script>
 </body>
 </html>
