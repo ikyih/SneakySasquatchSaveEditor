@@ -1,5 +1,6 @@
 # Sneaky Sasquatch Save editor
 This is a Sneaky Sasquatch Save editor. 
+## This project has been deprecated and replaced with [Sneaky Sastools](https://github.com/ikyih/SneakySastools)
 ## Prerequisites
 1. A Mac
 2. The game
